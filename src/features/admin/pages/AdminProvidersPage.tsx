@@ -21,7 +21,6 @@ export default function AdminProvidersPage() {
     const url = await getVerificationDocUrl(path);
     window.open(url, '_blank');
   }
-
   return (
     <div>
       <h1 style={{ margin: '0 0 4px' }}>Proveedores</h1>

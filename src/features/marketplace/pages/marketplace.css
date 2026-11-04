@@ -1,0 +1,232 @@
+.vex-marketplace {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  color: #f6f8fc;
+}
+
+.vex-marketplace-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.vex-marketplace-heading h1 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+}
+
+.vex-marketplace-heading p {
+  margin: 0;
+  color: #9eabc0;
+}
+
+.vex-wallet {
+  padding: 12px 16px;
+  background: #191e28;
+  border: 1px solid #2b3445;
+  border-radius: 12px;
+  white-space: nowrap;
+  color: #aebbd0;
+}
+
+.vex-wallet strong {
+  color: #fff;
+  margin-left: 8px;
+}
+
+.vex-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1a2130;
+  border: 1px solid #344055;
+  border-radius: 12px;
+  padding: 0 16px;
+  margin-bottom: 18px;
+  min-height: 52px;
+}
+
+.vex-search span {
+  font-size: 30px;
+  color: #aebbd0;
+}
+
+.vex-search input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  box-shadow: none;
+}
+
+.vex-search input:focus {
+  outline: none;
+}
+
+.vex-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.vex-category {
+  border: 1px solid #2d3749;
+  background: #171d29;
+  color: #d6deec;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.vex-category:hover {
+  border-color: #ffcc00;
+}
+
+.vex-category.active {
+  background: #ffcc00;
+  color: #141414;
+  border-color: #ffcc00;
+}
+
+.vex-product-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.vex-product-card {
+  min-width: 0;
+  overflow: hidden;
+  background: #141923;
+  border: 1px solid #2c3444;
+  border-radius: 13px;
+  transition: transform .2s ease, border-color .2s ease;
+}
+
+.vex-product-card:hover {
+  transform: translateY(-4px);
+  border-color: #ffcc00;
+}
+
+.vex-product-banner {
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+  text-align: center;
+}
+
+.vex-product-banner span {
+  font-size: clamp(20px, 2vw, 29px);
+  font-weight: 850;
+  letter-spacing: -1px;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+}
+
+.vex-product-content {
+  padding: 13px;
+}
+
+.vex-product-content h3 {
+  font-size: 14px;
+  margin: 0 0 8px;
+}
+
+.vex-product-category {
+  display: inline-block;
+  padding: 4px 9px;
+  background: #283244;
+  color: #d9e5f7;
+  font-size: 11px;
+  border-radius: 999px;
+}
+
+.vex-product-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.vex-product-footer small {
+  color: #9eabc0;
+  font-size: 11px;
+}
+
+.vex-offers-button {
+  background: transparent;
+  border: 1px solid #ffcc00;
+  color: #ffcc00;
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.vex-offers-button:hover {
+  background: #ffcc00;
+  color: #111;
+}
+
+.vex-message {
+  color: #aebbd0;
+  padding: 20px 0;
+}
+
+.vex-error {
+  color: #ff8a8a;
+  padding: 12px 0;
+}
+
+@media (max-width: 1350px) {
+  .vex-product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1050px) {
+  .vex-product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .vex-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .vex-product-banner {
+    height: 105px;
+  }
+
+  .vex-product-banner span {
+    font-size: 20px;
+  }
+
+  .vex-marketplace-heading {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .vex-product-grid {
+    grid-template-columns: 1fr;
+  }
+}

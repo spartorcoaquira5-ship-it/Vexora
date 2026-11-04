@@ -1,0 +1,335 @@
+
+.vex-register-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #0c0e13;
+  color: #fff;
+}
+
+.vex-register-left {
+  position: relative;
+  min-height: 100vh;
+  padding: 48px 58px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(255, 204, 0, .12),
+      transparent 50%
+    ),
+    linear-gradient(145deg, #10131b, #080a0e);
+}
+
+.vex-register-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.vex-register-logo span {
+  color: #ffcc00;
+  font-size: 43px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.vex-register-left-content {
+  max-width: 490px;
+}
+
+.vex-register-left-content h1 {
+  font-size: clamp(30px, 3vw, 43px);
+  line-height: 1.18;
+  letter-spacing: -1.2px;
+  margin-bottom: 20px;
+}
+
+.vex-register-left-content p {
+  color: #b1bfd3;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.vex-register-left-footer {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  color: #ffcc00;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.vex-register-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px 36px;
+}
+
+.vex-register-form-container {
+  width: 100%;
+  max-width: 475px;
+}
+
+.vex-register-back {
+  display: inline-block;
+  color: #ffcc00;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 28px;
+}
+
+.vex-register-notice {
+  padding: 15px;
+  border: 1px solid #ffcc00;
+  border-radius: 12px;
+  background: rgba(255, 204, 0, .09);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+}
+
+.vex-register-form-container h2 {
+  font-size: 30px;
+  margin: 0 0 6px;
+  color: #fff;
+}
+
+.vex-register-subtitle {
+  color: #9cacc2;
+  margin-bottom: 30px;
+}
+
+.vex-register-roles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.vex-register-role {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  padding: 14px;
+  border-radius: 13px;
+  border: 1px solid #2b3445;
+  background: #171b24;
+  color: #fff;
+  cursor: pointer;
+}
+
+.vex-register-role.active {
+  border-color: #ffcc00;
+  background: rgba(255, 204, 0, .1);
+}
+
+.vex-register-role-icon {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.vex-register-role-icon.client {
+  background: #10b981;
+}
+
+.vex-register-role-icon.provider {
+  background: #f4b82b;
+  color: #111;
+}
+
+.vex-register-role strong,
+.vex-register-role small {
+  display: block;
+}
+
+.vex-register-role strong {
+  font-size: 14px;
+}
+
+.vex-register-role small {
+  font-size: 12px;
+  color: #aebbd0;
+  margin-top: 3px;
+}
+
+.vex-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.vex-register-field label {
+  display: block;
+  color: #b4c4d9;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.vex-register-field input {
+  width: 100%;
+  min-width: 0;
+  height: 52px;
+  box-sizing: border-box;
+  padding: 0 15px;
+  border-radius: 11px;
+  border: 1px solid #2d3748;
+  background: #171b24;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+}
+
+.vex-register-field input:focus {
+  border-color: #ffcc00;
+}
+
+.vex-register-password-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.vex-register-password-wrap {
+  position: relative;
+}
+
+.vex-register-password-wrap input {
+  padding-right: 60px;
+}
+
+.vex-register-password-wrap button {
+  position: absolute;
+  right: 9px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #b4c4d9;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.vex-register-error {
+  color: #ff9292;
+  font-size: 13px;
+  margin: 0;
+}
+
+.vex-register-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  border-radius: 11px;
+  background: #ffcc00;
+  color: #101010;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.vex-register-submit:hover {
+  background: #ffd735;
+}
+
+.vex-register-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.vex-register-login {
+  margin-top: 30px;
+  text-align: center;
+  color: #aebbd0;
+  font-size: 14px;
+}
+
+.vex-register-login a {
+  color: #ffcc00;
+  text-decoration: none;
+}
+
+.vex-register-confirm {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #0c0e13;
+}
+
+.vex-register-confirm-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 35px;
+  background: #171b24;
+  border: 1px solid #303746;
+  border-radius: 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.vex-register-confirm-card .vex-register-logo {
+  justify-content: center;
+}
+
+.vex-confirm-icon {
+  font-size: 45px;
+  color: #ffcc00;
+  margin-top: 30px;
+}
+
+.vex-register-confirm-card p {
+  color: #b4c4d9;
+  line-height: 1.6;
+}
+
+.vex-register-confirm-card .vex-register-back {
+  margin-top: 25px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 850px) {
+  .vex-register-page {
+    grid-template-columns: 1fr;
+  }
+
+  .vex-register-left {
+    min-height: auto;
+    padding: 24px;
+  }
+
+  .vex-register-left-content,
+  .vex-register-left-footer {
+    display: none;
+  }
+
+  .vex-register-right {
+    padding: 35px 20px 60px;
+  }
+}
+
+@media (max-width: 420px) {
+  .vex-register-password-grid,
+  .vex-register-roles {
+    grid-template-columns: 1fr;
+  }
+}

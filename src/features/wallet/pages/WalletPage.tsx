@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { supabase } from '@/shared/lib/supabaseClient';
 import {
   createRecharge,
   listMovements,
@@ -18,6 +19,8 @@ import './wallet.css';
 const MIN = 10;
 const MAX = 500;
 type PaymentMethod = 'yape' | 'binance' | 'tarjeta';
+type TransferMethod = 'yape' | 'binance';
+type PaymentAccounts = Partial<Record<TransferMethod, string>>;
 
 const METHODS: { id: PaymentMethod; label: string; description: string }[] = [
   { id: 'yape', label: 'Yape', description: 'Transferencia' },
@@ -67,6 +70,45 @@ export default function WalletPage() {
   const [showCardModal, setShowCardModal] = useState(false);
   const [cardAmount, setCardAmount] = useState(0);
   const [balanceVisible, setBalanceVisible] = useState(true);
+
+  // Solo lectura: datos de recepción configurados por el administrador.
+  const [paymentAccounts, setPaymentAccounts] = useState<PaymentAccounts>({});
+  const [loadingPaymentAccounts, setLoadingPaymentAccounts] = useState(true);
+  const [paymentAccountsError, setPaymentAccountsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadPaymentAccounts() {
+      const { data, error: fetchError } = await supabase
+        .from('recharge_payment_methods')
+        .select('method, account_identifier')
+        .in('method', ['yape', 'binance']);
+
+      if (!mounted) return;
+      if (fetchError) {
+        setPaymentAccountsError('No se pudieron consultar los datos de pago.');
+      } else {
+        
+const accounts: PaymentAccounts = {};
+
+for (const row of data ?? []) {
+  if (row.method === 'yape') {
+    accounts.yape = row.account_identifier;
+  } else if (row.method === 'binance') {
+    accounts.binance = row.account_identifier;
+  }
+}
+
+setPaymentAccounts(accounts);
+
+        setPaymentAccountsError(null);
+      }
+      setLoadingPaymentAccounts(false);
+    }
+    void loadPaymentAccounts();
+    return () => { mounted = false; };
+  }, []);
+
 
   const load = useCallback(async () => {
     try {
@@ -169,6 +211,38 @@ export default function WalletPage() {
           <div className="vxw-methods" role="group" aria-label="Método de recarga">
             {METHODS.map(option => <button key={option.id} type="button" aria-pressed={method === option.id} className={`vxw-method ${method === option.id ? 'is-active' : ''}`} onClick={() => { setMethod(option.id); setError(null); setPendingUploadId(null); }}><MethodIcon method={option.id}/><span className="vxw-method-copy"><strong>{option.label}</strong><small>{option.description}</small></span>{method === option.id && <span className="vxw-selected"><Icon name="check" size={12}/></span>}</button>)}
           </div>
+          {method !== 'tarjeta' && (
+            <div
+              role="status"
+              aria-live="polite"
+              style={{ margin: '14px 0', padding: 16, border: '1px solid var(--border, #30343d)', borderRadius: 12, background: 'var(--bg-2, #17191f)' }}
+            >
+              <div style={{ fontSize: 12, color: 'var(--text-2)', marginBottom: 6 }}>
+                {method === 'yape' ? 'Número de Yape para enviar el pago' : 'Binance ID para enviar el pago'}
+              </div>
+              {loadingPaymentAccounts ? (
+                <span style={{ color: 'var(--text-2)' }}>Consultando datos de pago...</span>
+              ) : paymentAccountsError ? (
+                <span className="vxw-error">{paymentAccountsError}</span>
+              ) : paymentAccounts[method] ? (
+                <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 12 }}>
+                  <strong style={{ fontSize: 20, overflowWrap: 'anywhere' }}>{paymentAccounts[method]}</strong>
+                  <button
+                    type="button"
+                    className="vxw-secondary"
+                    onClick={() => {
+                      const identifier = paymentAccounts[method];
+                      if (identifier) void navigator.clipboard.writeText(identifier).catch(() => setError('No se pudo copiar el dato de pago.'));
+                    }}
+                  >
+                    Copiar
+                  </button>
+                </div>
+              ) : (
+                <span style={{ color: 'var(--text-2)' }}>Datos de pago no disponibles por el momento.</span>
+              )}
+            </div>
+          )}
           <div className="vxw-form-field"><label htmlFor="wallet-amount">Monto de recarga</label><div className="vxw-input-wrap"><span>S/</span><input id="wallet-amount" type="number" inputMode="decimal" min={MIN} max={MAX} step="0.01" value={amount} onChange={event => setAmount(event.target.value)} placeholder="50.00" disabled={saving}/></div><p>Importe permitido: S/ {MIN} – S/ {MAX}</p></div>
           {error && <p className="vxw-error" role="alert">{error}</p>}
           <button className="vxw-primary" type="button" disabled={saving} onClick={() => void handleCreate()}>{saving ? 'Procesando...' : method === 'tarjeta' ? 'Continuar con tarjeta' : 'Solicitar recarga'}<span aria-hidden="true">↗</span></button>

@@ -5,8 +5,8 @@ import { Modal } from '@/shared/components/Modal';
 import {
   listOffersForDuration,
   purchaseOffer,
-  stockOf,
 } from '../api/marketplace';
+import { supabase } from '@/shared/lib/supabaseClient';
 import type { Product, ProviderOffer } from '@/shared/types/db';
 import { money } from '@/shared/lib/format';
 import { useAuth } from '@/shared/hooks/useAuth';
@@ -27,6 +27,7 @@ export function ProductModal({
 
   const [durationId, setDurationId] = useState<string | null>(null);
   const [offers, setOffers] = useState<ProviderOffer[]>([]);
+  const [stockMap, setStockMap] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(false);
   const [buying, setBuying] = useState<string | null>(null);
   const [coupon, setCoupon] = useState('');
@@ -36,6 +37,7 @@ export function ProductModal({
     if (product) {
       setDurationId(product.product_durations[0]?.id ?? null);
       setOffers([]);
+      setStockMap({});
       setCoupon('');
       setError(null);
     }
@@ -46,15 +48,51 @@ export function ProductModal({
 
     let cancelled = false;
 
-    setLoading(true);
-    setOffers([]);
-    setError(null);
+    async function loadOffers() {
+      setLoading(true);
+      setOffers([]);
+      setStockMap({});
+      setError(null);
 
-    listOffersForDuration(product.id, durationId)
-      .then((data) => {
-        if (!cancelled) setOffers(data);
-      })
-      .catch((err) => {
+      try {
+        const data = await listOffersForDuration(
+          product!.id,
+          durationId!
+        );
+
+        if (cancelled) return;
+
+        setOffers(data);
+
+        // Consultar stock público real de cada oferta.
+        const stockResults = await Promise.all(
+          data.map(async (offer) => {
+            const { data: stock, error: stockError } =
+              await supabase.rpc('fn_public_offer_stock', {
+                p_offer_id: offer.id,
+              });
+
+            if (stockError) {
+              throw stockError;
+            }
+
+            return {
+              offerId: offer.id,
+              stock: Number(stock ?? 0),
+            };
+          })
+        );
+
+        if (cancelled) return;
+
+        const nextStock: Record<string, number> = {};
+
+        stockResults.forEach((item) => {
+          nextStock[item.offerId] = item.stock;
+        });
+
+        setStockMap(nextStock);
+      } catch (err) {
         if (!cancelled) {
           setError(
             err instanceof Error
@@ -62,10 +100,14 @@ export function ProductModal({
               : 'No se pudieron cargar las ofertas.'
           );
         }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }
+
+    void loadOffers();
 
     return () => {
       cancelled = true;
@@ -176,7 +218,7 @@ export function ProductModal({
 
           {loading && (
             <p style={{ color: 'var(--text-2)' }}>
-              Cargando ofertas...
+              Cargando ofertas y stock...
             </p>
           )}
 
@@ -188,7 +230,7 @@ export function ProductModal({
 
           <div className="offer-grid">
             {offers.map((offer) => {
-              const stock = stockOf(offer);
+              const stock = stockMap[offer.id] ?? 0;
               const providerName =
                 offer.providers?.business_name ?? 'Proveedor';
 
@@ -284,9 +326,7 @@ export function ProductModal({
 
                   <button
                     type="button"
-                    disabled={
-                      stock < 1 || buying !== null
-                    }
+                    disabled={loading || stock < 1 || buying !== null}
                     onClick={() => handleBuy(offer.id)}
                     style={{
                       width: '100%',

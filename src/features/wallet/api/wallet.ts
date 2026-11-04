@@ -22,19 +22,24 @@ export async function listMyRecharges(): Promise<Recharge[]> {
   return (data ?? []) as Recharge[];
 }
 
+
+
 export async function createRecharge(
   amount: number,
   method: 'yape' | 'binance'
-) {
+): Promise<string> {
   const { data, error } = await supabase.rpc('fn_create_recharge', {
     p_amount: amount,
     p_proof_url: null,
     p_reference: null,
+    p_method: method,
   });
 
   if (error) throw error;
   return data as string;
 }
+
+
 
 export async function uploadProof(
   rechargeId: string,

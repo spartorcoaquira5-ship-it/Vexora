@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { supabase } from '@/shared/lib/supabaseClient';
 import {
   listAllRecharges,
   confirmRecharge,
@@ -40,6 +41,74 @@ export default function AdminRechargesPage() {
     useState<string | null>(null);
   const [cardError, setCardError] =
     useState<string | null>(null);
+  // Datos de recepción: únicamente Yape y Binance ID.
+  const [yapeNumber, setYapeNumber] = useState('');
+  const [binanceId, setBinanceId] = useState('');
+  const [loadingPaymentAccounts, setLoadingPaymentAccounts] = useState(true);
+  const [savingPaymentMethod, setSavingPaymentMethod] =
+    useState<'yape' | 'binance' | null>(null);
+  const [paymentAccountMessage, setPaymentAccountMessage] = useState('');
+  const [paymentAccountError, setPaymentAccountError] = useState('');
+
+  async function loadPaymentAccounts() {
+    setLoadingPaymentAccounts(true);
+    setPaymentAccountError('');
+    try {
+      const { data, error } = await supabase
+        .from('recharge_payment_methods')
+        .select('method, account_identifier')
+        .in('method', ['yape', 'binance']);
+      if (error) throw error;
+      setYapeNumber(
+        data?.find((item) => item.method === 'yape')?.account_identifier ?? ''
+      );
+      setBinanceId(
+        data?.find((item) => item.method === 'binance')?.account_identifier ?? ''
+      );
+    } catch (err) {
+      setPaymentAccountError(
+        err instanceof Error ? err.message : 'No se pudieron cargar las cuentas.'
+      );
+    } finally {
+      setLoadingPaymentAccounts(false);
+    }
+  }
+
+  async function savePaymentAccount(method: 'yape' | 'binance') {
+    const identifier = (method === 'yape' ? yapeNumber : binanceId).trim();
+    setPaymentAccountMessage('');
+    setPaymentAccountError('');
+    if (!identifier) {
+      setPaymentAccountError('Ingresa un número o ID válido.');
+      return;
+    }
+    setSavingPaymentMethod(method);
+    try {
+      const { error } = await supabase.rpc('fn_admin_update_recharge_account', {
+        p_method: method,
+        p_identifier: identifier,
+      });
+      if (error) throw error;
+      if (method === 'yape') setYapeNumber(identifier);
+      else setBinanceId(identifier);
+      setPaymentAccountMessage(
+        method === 'yape'
+          ? 'Número de Yape guardado correctamente.'
+          : 'Binance ID guardado correctamente.'
+      );
+    } catch (err) {
+      setPaymentAccountError(
+        err instanceof Error ? err.message : 'No se pudo guardar el dato.'
+      );
+    } finally {
+      setSavingPaymentMethod(null);
+    }
+  }
+
+  useEffect(() => {
+    void loadPaymentAccounts();
+  }, []);
+
   async function loadRecharges() {
     setRechargeError(null);
     try {
@@ -187,6 +256,95 @@ export default function AdminRechargesPage() {
         Los intentos de tarjeta se registran por separado
         y nunca acreditan saldo.
       </p>
+      {/* Solo edición del número de Yape y Binance ID */}
+      <section className="panel-card" style={{ marginBottom: 24, padding: 20 }}>
+        <h2 style={{ marginTop: 0, fontSize: 19 }}>
+          Cuentas para recibir recargas
+        </h2>
+        {paymentAccountError && (
+          <p className="error" role="alert">{paymentAccountError}</p>
+        )}
+        {paymentAccountMessage && (
+          <p style={{ color: '#22c55e' }} role="status">
+            {paymentAccountMessage}
+          </p>
+        )}
+        {loadingPaymentAccounts ? (
+          <p style={{ color: 'var(--text-2)' }}>Cargando datos...</p>
+        ) : (
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: 16,
+          }}>
+            <div>
+              <label htmlFor="admin-yape-number" style={{
+                display: 'block', fontWeight: 700, marginBottom: 8,
+              }}>
+                Número de Yape
+              </label>
+              <input
+                id="admin-yape-number"
+                type="tel"
+                inputMode="numeric"
+                autoComplete="off"
+                value={yapeNumber}
+                onChange={(e) => setYapeNumber(e.target.value)}
+                placeholder="Ej. 987654321"
+                maxLength={20}
+                style={{
+                  width: '100%', padding: 12, borderRadius: 10,
+                  border: '1px solid var(--border, #30343d)',
+                  background: 'var(--bg-2, #17191f)',
+                  color: 'var(--text-1, #fff)',
+                  boxSizing: 'border-box', marginBottom: 10,
+                }}
+              />
+              <button
+                type="button"
+                className="mini-btn ok"
+                disabled={savingPaymentMethod !== null}
+                onClick={() => void savePaymentAccount('yape')}
+              >
+                {savingPaymentMethod === 'yape' ? 'Guardando...' : 'Guardar Yape'}
+              </button>
+            </div>
+            <div>
+              <label htmlFor="admin-binance-id" style={{
+                display: 'block', fontWeight: 700, marginBottom: 8,
+              }}>
+                Binance ID
+              </label>
+              <input
+                id="admin-binance-id"
+                type="text"
+                autoComplete="off"
+                value={binanceId}
+                onChange={(e) => setBinanceId(e.target.value)}
+                placeholder="Ingresa tu Binance ID"
+                maxLength={100}
+                style={{
+                  width: '100%', padding: 12, borderRadius: 10,
+                  border: '1px solid var(--border, #30343d)',
+                  background: 'var(--bg-2, #17191f)',
+                  color: 'var(--text-1, #fff)',
+                  boxSizing: 'border-box', marginBottom: 10,
+                }}
+              />
+              <button
+                type="button"
+                className="mini-btn ok"
+                disabled={savingPaymentMethod !== null}
+                onClick={() => void savePaymentAccount('binance')}
+              >
+                {savingPaymentMethod === 'binance'
+                  ? 'Guardando...'
+                  : 'Guardar Binance ID'}
+              </button>
+            </div>
+          </div>
+        )}
+      </section>
       {/* Pestañas */}
       <div
         style={{

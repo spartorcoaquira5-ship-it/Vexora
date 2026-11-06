@@ -1,102 +1,482 @@
-/* Mis ventas: solo presentación. Reemplaza tus reglas .kpis, .kpi y .row-item
-   si solo las usa esta página; si otras páginas las comparten, deja las tuyas
-   y usa estas con el prefijo .sales para no afectarlas. */
 
-.sales { max-width: 1200px; }
-.sales__title { margin: 0 0 4px; }
-.sales__sub { color: var(--text-2); margin: 0 0 28px; }
+/* ==========================================
+   VEXORA - MIS VENTAS
+   Diseño responsive para PC, tablet y móvil
+   Solo presentación, sin afectar otras páginas
+========================================== */
 
-/* ---------- KPIs ---------- */
+.sales {
+  --sales-bg: #121722;
+  --sales-bg-hover: #192130;
+  --sales-border: rgba(255,255,255,.09);
+  --sales-text: #f4f6fb;
+  --sales-muted: #98a3b6;
+  --sales-gold: #ffd200;
+
+  width: 100%;
+  max-width: 1440px;
+  min-width: 0;
+  margin: 0 auto;
+  padding: clamp(16px, 2.5vw, 32px);
+  box-sizing: border-box;
+  color: var(--sales-text);
+}
+
+.sales *,
+.sales *::before,
+.sales *::after {
+  box-sizing: border-box;
+}
+
+.sales__title {
+  margin: 0 0 8px;
+  font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.035em;
+  overflow-wrap: anywhere;
+}
+
+.sales__sub {
+  margin: 0 0 28px;
+  color: var(--sales-muted);
+  font-size: .92rem;
+  line-height: 1.6;
+}
+
+/* ==============================
+   KPI CARDS
+============================== */
+
 .sales .kpis {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 32px;
+  gap: 16px;
+  margin: 0 0 34px;
+  width: 100%;
+  min-width: 0;
 }
+
 .sales .kpi {
-  background: #12161f;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 14px;
-  padding: 18px 20px;
-  transition: transform 0.15s, border-color 0.15s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 0;
+  min-height: 132px;
+  padding: 20px;
+  background: var(--sales-bg);
+  border: 1px solid var(--sales-border);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.08);
+  overflow: hidden;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
 }
-.sales .kpi:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.16); }
-.sales .kpi strong {
-  display: block;
-  margin-top: 8px;
-  font-size: 1.7rem;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
+
+@media (hover: hover) {
+  .sales .kpi:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,.2);
+    box-shadow: 0 12px 28px rgba(0,0,0,.15);
+  }
 }
+
 .sales .kpi__label {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  min-width: 0;
+  color: var(--sales-muted);
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: .055em;
   text-transform: uppercase;
-  color: var(--text-2);
+  overflow-wrap: anywhere;
 }
+
+.sales .kpi strong {
+  display: block;
+  max-width: 100%;
+  margin-top: 14px;
+  color: var(--sales-text);
+  font-size: clamp(1.2rem, 1.8vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -.035em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
 .sales .kpi--highlight {
-  background: #1a1608;
-  border-color: rgba(255, 210, 0, 0.45);
+  background: linear-gradient(
+    145deg,
+    #26210f 0%,
+    #171a20 100%
+  );
+  border-color: rgba(255,210,0,.4);
 }
-.sales .kpi--highlight .kpi__label { color: #ffd200; }
 
-.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.dot--held { background: #f5a524; }
-.dot--available { background: #3fcf8e; }
-.dot--reserved { background: #4c9aff; }
-.dot--withdrawn { background: #7c8493; }
+.sales .kpi--highlight strong,
+.sales .kpi--highlight .kpi__label {
+  color: var(--sales-gold);
+}
 
-/* ---------- Lista de ventas ---------- */
+/* Indicadores */
+
+.sales .dot {
+  display: inline-block;
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.sales .dot--held {
+  background: #f5a524;
+}
+
+.sales .dot--available {
+  background: #3fcf8e;
+}
+
+.sales .dot--reserved {
+  background: #4c9aff;
+}
+
+.sales .dot--withdrawn {
+  background: #8b95a7;
+}
+
+/* ==============================
+   LISTADO DE VENTAS
+============================== */
+
 .sales .sale-head,
 .sales .sale-row {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) 1fr 1fr 1fr auto;
-  gap: 16px;
+  grid-template-columns:
+    minmax(0, 2fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(0, 1fr)
+    minmax(36px, auto);
   align-items: center;
+  column-gap: 16px;
+  width: 100%;
+  min-width: 0;
 }
-.sales .sale-head {
-  padding: 0 20px 10px;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #6b7383;
-}
-.sales .sale { margin-bottom: 12px; }
-.sales .sale-row {
-  background: #12161f;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
-  padding: 16px 20px;
-  transition: border-color 0.15s, background 0.15s;
-}
-.sales .sale-row:hover { border-color: rgba(255, 255, 255, 0.16); background: #141925; }
-.sale__name { font-weight: 500; }
-.sale__date { margin-top: 2px; font-size: 0.8rem; color: #6b7383; }
-.sale__muted { color: var(--text-2); font-variant-numeric: tabular-nums; }
-.sale__net { font-weight: 600; color: #ffd200; font-variant-numeric: tabular-nums; }
 
-/* ---------- Barra de retención ---------- */
-.hold {
+.sales .sale-head {
+  padding: 0 20px 14px;
+  color: var(--sales-muted);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .06em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.sales .sale {
+  min-width: 0;
+  margin-bottom: 12px;
+}
+
+.sales .sale-row {
+  min-height: 82px;
+  padding: 18px 20px;
+  background: var(--sales-bg);
+  border: 1px solid var(--sales-border);
+  border-radius: 14px;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+@media (hover: hover) {
+  .sales .sale-row:hover {
+    background: var(--sales-bg-hover);
+    border-color: rgba(255,255,255,.18);
+    box-shadow: 0 6px 20px rgba(0,0,0,.1);
+  }
+}
+
+.sales .sale-row > *,
+.sales .sale-head > * {
+  min-width: 0;
+}
+
+.sales .sale__product {
+  min-width: 0;
+}
+
+.sales .sale__name {
+  color: var(--sales-text);
+  font-size: .94rem;
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.sales .sale__date {
+  margin-top: 5px;
+  color: var(--sales-muted);
+  font-size: .78rem;
+  line-height: 1.4;
+}
+
+.sales .sale__muted {
+  color: var(--sales-muted);
+  font-size: .88rem;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.sales .sale__net {
+  color: var(--sales-gold);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* ==============================
+   BARRA DE RETENCIÓN
+============================== */
+
+.sales .hold {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 10px 6px 0;
-  font-size: 0.8rem;
-  color: #6b7383;
+  min-width: 0;
+  margin: 12px 6px 0;
+  color: var(--sales-muted);
+  font-size: .78rem;
+  line-height: 1.4;
 }
-.hold__bar { flex: 1; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
-.hold__fill { height: 100%; background: #f5a524; }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 1100px) {
-  .sales .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.sales .hold__bar {
+  flex: 1 1 auto;
+  min-width: 20px;
+  height: 6px;
+  background: rgba(255,255,255,.09);
+  border-radius: 999px;
+  overflow: hidden;
 }
-@media (max-width: 720px) {
-  .sales .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .sales .sale-head { display: none; }
-  .sales .sale-row { grid-template-columns: 1fr 1fr; }
-  .sales .sale__product { grid-column: 1 / -1; }
+
+.sales .hold__fill {
+  height: 100%;
+  max-width: 100%;
+  background: linear-gradient(
+    90deg,
+    #d88d15,
+    #ffd166
+  );
+  border-radius: inherit;
+  transition: width .3s ease;
+}
+
+/* ==============================
+   TABLET / LAPTOP
+============================== */
+
+@media (max-width: 1200px) {
+  .sales .kpis {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sales .kpi {
+    min-height: 120px;
+  }
+
+  .sales .sale-head,
+  .sales .sale-row {
+    column-gap: 12px;
+  }
+}
+
+/* ==============================
+   TABLET VERTICAL
+============================== */
+
+@media (max-width: 850px) {
+  .sales {
+    padding: 20px;
+  }
+
+  .sales .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .sales .kpi {
+    padding: 18px;
+  }
+
+  .sales .sale-head {
+    display: none;
+  }
+
+  .sales .sale-row {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .sales .sale__product {
+    grid-column: 1 / -1;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--sales-border);
+  }
+}
+
+/* ==============================
+   CELULARES
+============================== */
+
+@media (max-width: 600px) {
+  .sales {
+    width: 100%;
+    padding: 16px 12px 28px;
+  }
+
+  .sales__title {
+    font-size: 1.55rem;
+  }
+
+  .sales__sub {
+    margin-bottom: 22px;
+    font-size: .85rem;
+  }
+
+  .sales .kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .sales .kpi {
+    min-height: 110px;
+    padding: 14px;
+    border-radius: 13px;
+  }
+
+  .sales .kpi__label {
+    gap: 6px;
+    font-size: .64rem;
+    letter-spacing: .025em;
+  }
+
+  .sales .kpi strong {
+    margin-top: 12px;
+    font-size: clamp(1.05rem, 4.4vw, 1.45rem);
+    letter-spacing: -.025em;
+  }
+
+  /* KPI destacado ocupa todo el ancho */
+  .sales .kpi--highlight {
+    grid-column: 1 / -1;
+    min-height: 100px;
+  }
+
+  .sales .kpi--highlight strong {
+    font-size: 1.75rem;
+  }
+
+  .sales .sale {
+    margin-bottom: 12px;
+  }
+
+  .sales .sale-row {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 1fr);
+    gap: 14px 10px;
+    min-height: auto;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .sales .sale__product {
+    grid-column: 1 / -1;
+    padding-bottom: 12px;
+  }
+
+  .sales .sale__name {
+    font-size: .92rem;
+  }
+
+  .sales .sale__date {
+    font-size: .76rem;
+  }
+
+  .sales .sale__muted {
+    font-size: .82rem;
+  }
+
+  .sales .sale__net {
+    font-size: .96rem;
+  }
+
+  .sales .hold {
+    gap: 8px;
+    margin: 10px 4px 0;
+    font-size: .72rem;
+  }
+
+  .sales .hold__bar {
+    height: 5px;
+  }
+}
+
+/* ==============================
+   CELULARES MUY PEQUEÑOS
+============================== */
+
+@media (max-width: 360px) {
+  .sales {
+    padding: 12px 10px 24px;
+  }
+
+  .sales .kpis {
+    gap: 8px;
+  }
+
+  .sales .kpi {
+    padding: 12px;
+  }
+
+  .sales .kpi strong {
+    font-size: 1.05rem;
+  }
+
+  .sales .sale-row {
+    padding: 13px;
+  }
+}
+
+/* ==============================
+   ACCESIBILIDAD
+============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .sales .kpi,
+  .sales .sale-row,
+  .sales .hold__fill {
+    transition: none;
+  }
+
+  .sales .kpi:hover {
+    transform: none;
+  }
 }

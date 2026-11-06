@@ -1,0 +1,102 @@
+/* Mis ventas: solo presentación. Reemplaza tus reglas .kpis, .kpi y .row-item
+   si solo las usa esta página; si otras páginas las comparten, deja las tuyas
+   y usa estas con el prefijo .sales para no afectarlas. */
+
+.sales { max-width: 1200px; }
+.sales__title { margin: 0 0 4px; }
+.sales__sub { color: var(--text-2); margin: 0 0 28px; }
+
+/* ---------- KPIs ---------- */
+.sales .kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 32px;
+}
+.sales .kpi {
+  background: #12161f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 18px 20px;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.sales .kpi:hover { transform: translateY(-2px); border-color: rgba(255, 255, 255, 0.16); }
+.sales .kpi strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 1.7rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.sales .kpi__label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.sales .kpi--highlight {
+  background: #1a1608;
+  border-color: rgba(255, 210, 0, 0.45);
+}
+.sales .kpi--highlight .kpi__label { color: #ffd200; }
+
+.dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot--held { background: #f5a524; }
+.dot--available { background: #3fcf8e; }
+.dot--reserved { background: #4c9aff; }
+.dot--withdrawn { background: #7c8493; }
+
+/* ---------- Lista de ventas ---------- */
+.sales .sale-head,
+.sales .sale-row {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) 1fr 1fr 1fr auto;
+  gap: 16px;
+  align-items: center;
+}
+.sales .sale-head {
+  padding: 0 20px 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7383;
+}
+.sales .sale { margin-bottom: 12px; }
+.sales .sale-row {
+  background: #12161f;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.sales .sale-row:hover { border-color: rgba(255, 255, 255, 0.16); background: #141925; }
+.sale__name { font-weight: 500; }
+.sale__date { margin-top: 2px; font-size: 0.8rem; color: #6b7383; }
+.sale__muted { color: var(--text-2); font-variant-numeric: tabular-nums; }
+.sale__net { font-weight: 600; color: #ffd200; font-variant-numeric: tabular-nums; }
+
+/* ---------- Barra de retención ---------- */
+.hold {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 6px 0;
+  font-size: 0.8rem;
+  color: #6b7383;
+}
+.hold__bar { flex: 1; height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.07); overflow: hidden; }
+.hold__fill { height: 100%; background: #f5a524; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .sales .kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .sales .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sales .sale-head { display: none; }
+  .sales .sale-row { grid-template-columns: 1fr 1fr; }
+  .sales .sale__product { grid-column: 1 / -1; }
+}

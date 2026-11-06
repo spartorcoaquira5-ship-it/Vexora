@@ -19,6 +19,8 @@ import ProviderProfilePage from '@/features/provider/pages/ProviderProfilePage';
 import InventoryPage from '@/features/provider/pages/InventoryPage';
 import SalesPage from '@/features/provider/pages/SalesPage';
 import WithdrawalsPage from '@/features/provider/pages/WithdrawalsPage';
+import ProviderDashboardPage from '@/features/provider/pages/ProviderDashboardPage';
+
 
 import AdminProductsPage from '@/features/admin/pages/AdminProductsPage';
 import AdminRechargesPage from '@/features/admin/pages/AdminRechargesPage';
@@ -97,6 +99,17 @@ export function AppRouter() {
           <Page allow={['proveedor']} element={<ProviderProfilePage />} />
         }
       />
+      
+<Route
+  path="/dashboard-proveedor"
+  element={
+    <Page
+      allow={['proveedor']}
+      element={<ProviderDashboardPage />}
+    />
+  }
+/>
+
       <Route
         path="/inventario"
         element={<Page allow={['proveedor']} element={<InventoryPage />} />}

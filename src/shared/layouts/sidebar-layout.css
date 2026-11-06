@@ -1,0 +1,346 @@
+
+/* =========================================
+   VEXORA - SIDEBAR PREMIUM
+   Cliente / Proveedor / Administrador
+========================================= */
+
+.vx-layout {
+  --vx-sidebar-width: 250px;
+  --vx-gold: #ffd100;
+  --vx-muted: #929eaf;
+  --vx-border: rgba(255,255,255,.08);
+
+  display: flex;
+  min-height: 100vh;
+  min-width: 0;
+}
+
+.vx-layout *,
+.vx-layout *::before,
+.vx-layout *::after {
+  box-sizing: border-box;
+}
+
+.vx-sidebar {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: var(--vx-sidebar-width);
+  padding: 24px 14px 16px;
+  background: #11161f;
+  border-right: 1px solid var(--vx-border);
+}
+
+.vx-sidebar__brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+
+.vx-sidebar__logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f5f6fa;
+  text-decoration: none;
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+}
+
+.vx-sidebar__role {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 25px 8px 20px;
+  padding: 11px 12px;
+  color: #c4cbd6;
+  background: #1b222e;
+  border: 1px solid var(--vx-border);
+  border-radius: 10px;
+  font-size: .76rem;
+}
+
+.vx-sidebar__role-dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  background: #3fcf8e;
+  border-radius: 50%;
+}
+
+.vx-sidebar__nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #343d4b transparent;
+}
+
+.vx-sidebar__group {
+  margin-bottom: 22px;
+}
+
+.vx-sidebar__group-title {
+  padding: 0 14px;
+  margin-bottom: 10px;
+  color: #758195;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.vx-sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  min-height: 44px;
+  padding: 11px 13px;
+  margin-bottom: 4px;
+  color: #aeb8c7;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: .86rem;
+  font-weight: 500;
+  transition: background .2s, color .2s;
+}
+
+.vx-sidebar__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  width: 21px;
+  font-size: 1.15rem;
+}
+
+.vx-sidebar__link:hover {
+  color: #fff;
+  background: #202836;
+}
+
+.vx-sidebar__link--active,
+.vx-sidebar__link--active:hover {
+  color: #111;
+  background: var(--vx-gold);
+  font-weight: 700;
+}
+
+.vx-sidebar__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid var(--vx-border);
+}
+
+.vx-sidebar__account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+}
+
+.vx-sidebar__avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  color: #111;
+  background: var(--vx-gold);
+  border-radius: 11px;
+  font-weight: 800;
+}
+
+.vx-sidebar__account strong,
+.vx-sidebar__account small {
+  display: block;
+}
+
+.vx-sidebar__account strong {
+  color: #f5f6fa;
+  font-size: .83rem;
+}
+
+.vx-sidebar__account small {
+  margin-top: 3px;
+  color: var(--vx-muted);
+  font-size: .73rem;
+}
+
+.vx-sidebar__logout,
+.vx-sidebar__login,
+.vx-sidebar__register {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 43px;
+  padding: 11px;
+  border-radius: 10px;
+  font-size: .84rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.vx-sidebar__logout,
+.vx-sidebar__register {
+  color: #c5cbd6;
+  background: transparent;
+  border: 1px solid var(--vx-border);
+}
+
+.vx-sidebar__login {
+  color: #111;
+  background: var(--vx-gold);
+  border: 0;
+}
+
+.vx-sidebar__close {
+  display: none;
+}
+
+.vx-main {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--vx-sidebar-width);
+}
+
+.vx-main__content {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(16px, 2.5vw, 36px);
+}
+
+.vx-mobile-header,
+.vx-sidebar-overlay {
+  display: none;
+}
+
+/* TABLET Y CELULAR */
+
+@media (max-width: 900px) {
+  .vx-sidebar {
+    width: min(290px, 86vw);
+    z-index: 1002;
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+    box-shadow: 10px 0 35px rgba(0,0,0,.2);
+  }
+
+  .vx-sidebar--open {
+    transform: translateX(0);
+  }
+
+  .vx-sidebar-overlay {
+    display: block;
+    position: fixed;
+    z-index: 1001;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.65);
+    border: 0;
+    cursor: pointer;
+  }
+
+  .vx-sidebar__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    color: #fff;
+    background: #242b36;
+    border: 1px solid var(--vx-border);
+    border-radius: 8px;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .vx-main {
+    margin-left: 0;
+  }
+
+  .vx-mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-height: 65px;
+    padding: 12px 18px;
+    background: #11161f;
+    border-bottom: 1px solid var(--vx-border);
+  }
+
+  .vx-mobile-menu {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 39px;
+    height: 39px;
+    padding: 9px;
+    background: #202735;
+    border: 1px solid var(--vx-border);
+    border-radius: 9px;
+    cursor: pointer;
+  }
+
+  .vx-mobile-menu span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+  }
+
+  .vx-mobile-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.05rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+  }
+
+  .vx-mobile-brand span {
+    color: var(--vx-gold);
+    font-size: 1.4rem;
+  }
+
+  .vx-main__content {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vx-mobile-header {
+    padding: 11px 13px;
+  }
+
+  .vx-main__content {
+    padding: 14px 10px 24px;
+  }
+
+  .vx-sidebar {
+    padding-top: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-sidebar,
+  .vx-sidebar__link {
+    transition: none;
+  }
+}

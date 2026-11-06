@@ -1,0 +1,36 @@
+/* VEXORA · Solo estilos de ProductModal */
+.vx-purchase { color:#f7f8fa; font-family:inherit; padding:4px 2px 8px; }
+.vx-purchase__header { display:flex; align-items:center; gap:17px; padding:12px 0 22px; border-bottom:1px solid rgba(255,255,255,.09); }
+.vx-purchase__brand { display:grid; place-items:center; flex:0 0 64px; height:64px; border-radius:18px; color:#101114; background:linear-gradient(140deg,#ffe16b,#f7bc00); font-size:40px; font-weight:950; box-shadow:0 10px 35px rgba(255,204,0,.15); }
+.vx-purchase__heading { min-width:0; }
+.vx-purchase__eyebrow { color:#f5c400; font-size:10px; letter-spacing:.17em; font-weight:800; }
+.vx-purchase__heading h2 { margin:5px 0 4px; color:#fff; font-size:clamp(23px,3vw,31px); line-height:1.15; }
+.vx-purchase__heading p { margin:0; color:#a6adba; font-size:13px; line-height:1.5; }
+.vx-purchase__section { padding:21px 0 16px; }
+.vx-purchase__label,.vx-purchase__coupon label { display:block; margin-bottom:10px; font-size:12px; font-weight:750; color:#dce0e8; }
+.vx-purchase__durations { display:flex; gap:9px; flex-wrap:wrap; }
+.vx-purchase__duration { border:1px solid #343a46; background:#191d25; color:#d8dce5; padding:10px 16px; border-radius:11px; font-size:13px; font-weight:700; cursor:pointer; }
+.vx-purchase__duration.is-selected { color:#151515; background:#ffd21b; border-color:#ffd21b; }
+.vx-purchase__duration:focus-visible,.vx-purchase__profile:focus-visible,.vx-purchase__buy:focus-visible { outline:2px solid #ffdb37; outline-offset:3px; }
+.vx-purchase__coupon { padding:0 0 18px; }
+.vx-purchase__coupon input { display:block; width:100%; max-width:370px; box-sizing:border-box; border-radius:10px; border:1px solid #353b48; background:#141820; color:#fff; padding:12px 14px; font:inherit; font-size:13px; }
+.vx-purchase__coupon span { display:block; margin-top:7px; font-size:11px; color:#8992a2; }
+.vx-purchase__error { padding:12px 14px; color:#ffaaa9; background:rgba(239,68,68,.09); border:1px solid rgba(239,68,68,.22); border-radius:10px; font-size:13px; }
+.vx-purchase__notice { color:#aab2c0; font-size:13px; padding:14px 0; }
+.vx-purchase__offers { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:3px; }
+.vx-purchase__offer { min-width:0; border:1px solid #333a46; border-radius:17px; padding:18px; background:linear-gradient(155deg,#20252e,#161a21); box-shadow:0 10px 28px rgba(0,0,0,.12); }
+.vx-purchase__provider { display:flex; align-items:center; gap:11px; min-width:0; padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,.08); }
+.vx-purchase__avatar { width:42px; height:42px; flex:0 0 42px; display:grid; place-items:center; border-radius:13px; color:#171717; background:#ffcf1d; font-weight:850; font-size:13px; }
+.vx-purchase__provider-details { min-width:0; flex:1; }
+.vx-purchase__provider-details strong { display:block; overflow-wrap:anywhere; color:#fff; font-size:14px; }
+.vx-purchase__rating { display:block; margin-top:4px; font-size:12px; color:#ffcf1d; }
+.vx-purchase__profile { flex:0 0 auto; border:1px solid #3d4451; background:#292f3a; color:#f1f3f7; border-radius:9px; padding:9px 10px; cursor:pointer; font-size:11px; font-weight:650; }
+.vx-purchase__offer-bottom { display:flex; justify-content:space-between; align-items:end; gap:8px; padding:18px 0; }
+.vx-purchase__price-label { display:block; color:#9da6b6; font-size:11px; margin-bottom:4px; }
+.vx-purchase__price { color:#fff; font-size:clamp(24px,3vw,32px); font-weight:850; letter-spacing:-.035em; }
+.vx-purchase__stock { color:#75e8a7; background:rgba(42,191,110,.1); border:1px solid rgba(42,191,110,.2); border-radius:99px; padding:6px 9px; font-size:11px; font-weight:700; white-space:nowrap; }
+.vx-purchase__stock.is-empty { color:#f5a0a0; background:rgba(239,68,68,.1); border-color:rgba(239,68,68,.2); }
+.vx-purchase__buy { display:block; width:100%; padding:13px; border:0; border-radius:11px; background:linear-gradient(180deg,#ffe15b,#ffc900); color:#121212; font-size:13px; font-weight:850; cursor:pointer; }
+.vx-purchase__buy:hover:not(:disabled) { filter:brightness(1.05); }
+.vx-purchase__buy:disabled { opacity:.45; cursor:not-allowed; }
+@media(max-width:640px) { .vx-purchase__header { gap:12px; } .vx-purchase__brand { flex-basis:49px; height:49px; font-size:29px; border-radius:13px; } .vx-purchase__offers { grid-template-columns:1fr; } .vx-purchase__offer { padding:14px; } .vx-purchase__profile { padding:8px; } }

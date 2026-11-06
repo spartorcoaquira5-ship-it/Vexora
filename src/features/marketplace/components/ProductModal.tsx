@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from '@/shared/components/Modal';
@@ -10,6 +9,7 @@ import { supabase } from '@/shared/lib/supabaseClient';
 import type { Product, ProviderOffer } from '@/shared/types/db';
 import { money } from '@/shared/lib/format';
 import { useAuth } from '@/shared/hooks/useAuth';
+import './product-modal.css';
 
 export function ProductModal({
   product,
@@ -64,7 +64,7 @@ export function ProductModal({
 
         setOffers(data);
 
-        // Consultar stock público real de cada oferta.
+        // Consultar stock pÃºblico real de cada oferta.
         const stockResults = await Promise.all(
           data.map(async (offer) => {
             const { data: stock, error: stockError } =
@@ -123,7 +123,7 @@ export function ProductModal({
       navigate('/register', {
         state: {
           message:
-            'Para comprar necesitas una cuenta. Créala o inicia sesión y seguimos con tu compra.',
+            'Para comprar necesitas una cuenta. CrÃ©ala o inicia sesiÃ³n y seguimos con tu compra.',
           returnTo: '/marketplace',
           productId: product?.id,
           durationId,
@@ -153,205 +153,106 @@ export function ProductModal({
   }
 
   return (
-    <Modal open={!!product} onClose={onClose} maxWidth={760}>
+    <Modal open={!!product} onClose={onClose} maxWidth={900}>
       {product && (
-        <>
-          <h2 style={{ marginTop: 0, marginBottom: 6 }}>
-            {product.name}
-          </h2>
+        <div className="vx-purchase">
+          <header className="vx-purchase__header">
+            <div className="vx-purchase__brand">V</div>
+            <div className="vx-purchase__heading">
+              <span className="vx-purchase__eyebrow">VEXORA · MARKETPLACE</span>
+              <h2>{product.name}</h2>
+              <p>Compara las ofertas disponibles y elige tu proveedor.</p>
+            </div>
+          </header>
 
-          <p
-            style={{
-              fontSize: 13,
-              color: 'var(--text-2)',
-              marginBottom: 18,
-            }}
-          >
-            Compara las ofertas de cada proveedor y elige la tuya.
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              gap: 8,
-              flexWrap: 'wrap',
-              marginBottom: 18,
-            }}
-          >
-            {product.product_durations.map((duration) => (
-              <button
-                type="button"
-                key={duration.id}
-                className="mini-btn"
-                style={
-                  durationId === duration.id
-                    ? {
-                        background: 'var(--yellow)',
-                        color: 'var(--on-yellow)',
-                        borderColor: 'var(--yellow)',
-                      }
-                    : {}
-                }
-                onClick={() => setDurationId(duration.id)}
-              >
-                {duration.label}
-              </button>
-            ))}
-          </div>
+          <section className="vx-purchase__section" aria-label="Duración del servicio">
+            <span className="vx-purchase__label">Selecciona la duración</span>
+            <div className="vx-purchase__durations">
+              {product.product_durations.map((duration) => (
+                <button
+                  type="button"
+                  key={duration.id}
+                  className={`vx-purchase__duration ${durationId === duration.id ? 'is-selected' : ''}`}
+                  aria-pressed={durationId === duration.id}
+                  onClick={() => setDurationId(duration.id)}
+                >
+                  {duration.label}
+                </button>
+              ))}
+            </div>
+          </section>
 
           {session && (
-            <div
-              className="field"
-              style={{ maxWidth: 280, marginBottom: 16 }}
-            >
-              <label>¿Tienes un cupón?</label>
+            <div className="vx-purchase__coupon">
+              <label htmlFor="vx-purchase-coupon">¿Tienes un cupón?</label>
               <input
+                id="vx-purchase-coupon"
                 type="text"
-                placeholder="Código (opcional)"
+                placeholder="Código de descuento (opcional)"
                 value={coupon}
-                onChange={(e) => setCoupon(e.target.value)}
+                onChange={(event) => setCoupon(event.target.value)}
               />
+              <span>El descuento se validará al comprar.</span>
             </div>
           )}
 
-          {error && <p className="error">{error}</p>}
-
-          {loading && (
-            <p style={{ color: 'var(--text-2)' }}>
-              Cargando ofertas y stock...
-            </p>
-          )}
-
+          {error && <p className="vx-purchase__error" role="alert">{error}</p>}
+          {loading && <p className="vx-purchase__notice">Cargando ofertas y stock...</p>}
           {!loading && !error && offers.length === 0 && (
-            <p style={{ color: 'var(--text-2)' }}>
-              Aún no hay proveedores con ofertas para esta duración.
-            </p>
+            <p className="vx-purchase__notice">Aún no hay proveedores con ofertas para esta duración.</p>
           )}
 
-          <div className="offer-grid">
+          <div className="vx-purchase__offers">
             {offers.map((offer) => {
               const stock = stockMap[offer.id] ?? 0;
-              const providerName =
-                offer.providers?.business_name ?? 'Proveedor';
-
+              const providerName = offer.providers?.business_name ?? 'Proveedor';
               const rating = offer.providers?.rating_avg;
-
               return (
-                <div key={offer.id} className="offer-card">
-                  <div
-                    onClick={() => onOpenProvider(offer.provider_id)}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                      cursor: 'pointer',
-                      marginBottom: 14,
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 42,
-                        height: 42,
-                        borderRadius: '50%',
-                        background: 'var(--green)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: '#fff',
-                        fontSize: 13,
-                        fontWeight: 700,
-                        flexShrink: 0,
-                      }}
-                    >
+                <article key={offer.id} className="vx-purchase__offer">
+                  <div className="vx-purchase__provider">
+                    <div className="vx-purchase__avatar" aria-hidden="true">
                       {providerName.slice(0, 2).toUpperCase()}
                     </div>
-
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 15,
-                          fontWeight: 700,
-                        }}
-                      >
-                        {providerName}
-                      </div>
-
-                      <div
-                        style={{
-                          fontSize: 12,
-                          color: 'var(--yellow)',
-                        }}
-                      >
-                        {rating != null
-                          ? `★ ${Number(rating).toFixed(1)}`
-                          : 'Proveedor nuevo'}
-                      </div>
-
-                      <button
-                        type="button"
-                        className="mini-btn"
-                        style={{ marginTop: 6 }}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onOpenProvider(offer.provider_id);
-                        }}
-                      >
-                        Ver perfil →
-                      </button>
+                    <div className="vx-purchase__provider-details">
+                      <strong>{providerName}</strong>
+                      <span className="vx-purchase__rating">
+                        {rating != null ? `★ ${Number(rating).toFixed(1)}` : 'Proveedor nuevo'}
+                      </span>
                     </div>
+                    <button
+                      type="button"
+                      className="vx-purchase__profile"
+                      onClick={() => onOpenProvider(offer.provider_id)}
+                    >
+                      Ver perfil →
+                    </button>
                   </div>
-
-                  <div
-                    style={{
-                      fontSize: 25,
-                      fontWeight: 800,
-                      marginBottom: 12,
-                    }}
-                  >
-                    {money(offer.price)}
+                  <div className="vx-purchase__offer-bottom">
+                    <div>
+                      <span className="vx-purchase__price-label">Precio de la oferta</span>
+                      <div className="vx-purchase__price">{money(offer.price)}</div>
+                    </div>
+                    <span className={`vx-purchase__stock ${stock < 1 ? 'is-empty' : ''}`}>
+                      {stock > 0 ? `${stock} disponibles` : 'Sin stock'}
+                    </span>
                   </div>
-
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      fontSize: 13,
-                      color: 'var(--text-2)',
-                      marginBottom: 14,
-                    }}
-                  >
-                    <span>Stock disponible</span>
-                    <strong>{stock}</strong>
-                  </div>
-
                   <button
                     type="button"
+                    className="vx-purchase__buy"
                     disabled={loading || stock < 1 || buying !== null}
                     onClick={() => handleBuy(offer.id)}
-                    style={{
-                      width: '100%',
-                      background:
-                        stock > 0
-                          ? 'var(--yellow)'
-                          : 'var(--card-2)',
-                      color:
-                        stock > 0
-                          ? 'var(--on-yellow)'
-                          : 'var(--text-2)',
-                      fontWeight: 700,
-                    }}
                   >
                     {buying === offer.id
                       ? 'Procesando...'
                       : stock < 1
                         ? 'Sin stock'
-                        : 'Comprar'}
+                        : 'Comprar ahora →'}
                   </button>
-                </div>
+                </article>
               );
             })}
           </div>
-        </>
+        </div>
       )}
     </Modal>
   );
